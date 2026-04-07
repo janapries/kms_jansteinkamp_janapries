@@ -1,5 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { Alert, Button, Platform, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { PaperProvider } from 'react-native-paper';
+import CreatePost from './feature/screens/CreatePost';
+import DetailScreen from './feature/screens/DetailScreen';
+import ListView from './feature/screens/ListView';
 
 function showAlert(message: string) {
   if (Platform.OS === 'web') {
@@ -11,16 +16,12 @@ function showAlert(message: string) {
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-      <Button
-        onPress={() => showAlert('KMS')}
-        title="KMS"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-    </View>
+    <SafeAreaProvider>
+      <PaperProvider>
+        <DetailScreen />
+        <StatusBar style="auto" />
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }
 
