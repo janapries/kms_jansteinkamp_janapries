@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Appbar, List } from 'react-native-paper';
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { Post } from '../domain/Post';
 
 import { useNavigation } from '@react-navigation/native';
@@ -32,17 +32,19 @@ export default function ListView() {
                 <Appbar.Content title="Posts" />
                 <Appbar.Action icon="plus" onPress={_onCreatePost} />
             </Appbar.Header>
-            <FlatList
-                data={posts}
-                keyExtractor={(post) => post.id}
-                renderItem={({ item }) => (
-                    <List.Item
-                        title={item.title}
-                        description={`${item.author}: ${item.description}`}
-                        left={props => <List.Icon {...props} icon="text-box" />}
-                    />
-                )}
-            />
+                <FlatList
+                    data={posts}
+                    keyExtractor={(post) => post.id}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={() => navigation.navigate('Detail', { id: item.id })}>
+                            <List.Item
+                                title={item.title}
+                                description={`${item.author}: ${item.description}`}
+                                left={props => <List.Icon {...props} icon="text-box" />}
+                            />
+                        </TouchableOpacity>
+                    )}
+                />
         </View>
     );
 };

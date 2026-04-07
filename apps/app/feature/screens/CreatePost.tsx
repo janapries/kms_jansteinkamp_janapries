@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Appbar, Button, TextInput } from "react-native-paper";
+import { RootStackParamList } from '../../navigation/RootStack';
 
 export default function CreatePost() {
 
