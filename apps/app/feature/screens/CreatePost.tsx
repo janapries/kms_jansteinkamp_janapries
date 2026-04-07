@@ -51,6 +51,8 @@ export default function CreatePost() {
                 />
                 <Button mode="contained" onPress={() => console.log('Pressed')}>
                     Submit
+                    // add post to list
+                    // navigation home
                 </Button>
             </View>
         </View>

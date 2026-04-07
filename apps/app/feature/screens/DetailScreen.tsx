@@ -1,11 +1,14 @@
 import { View, StyleSheet } from "react-native";
 import { Appbar, Button } from "react-native-paper";
+import { RootStackParamList } from '../../navigation/RootStack';
 
 
 export default function DetailScreen() {
 
     const _onBack = () => { }
 
+    // zeige mir post mit der id X aus der Liste Posts
+    // instanz variable post
     return (
         <View>
             <Appbar.Header>
@@ -16,9 +19,11 @@ export default function DetailScreen() {
             <View style={styles.content}>
                 <Button style={styles.button} mode="contained" onPress={() => console.log('Pressed')}>
                     Edit Post
+                    // wir rufen die create seite auf oder eine update
                 </Button>
                 <Button style={styles.buttonDelete} mode="contained" onPress={() => console.log('Pressed')}>
                     Delete Post
+                    // remove from list
                 </Button>
             </View>
         </View>
