@@ -3,7 +3,15 @@ import { Appbar, List } from 'react-native-paper';
 import { View, FlatList, StyleSheet } from "react-native";
 import { Post } from '../domain/Post';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/RootStack';
+
 export default function ListView() {
+
+    // use Nav braucht die Paramliste wegen der Overload Fehlermeldung, gekommen durch AI nachfrag, NavigationsQuelle war React doc
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
     const [posts] = useState<Post[]>([
         {
             id: "1",
@@ -15,7 +23,7 @@ export default function ListView() {
     ]);
 
     const _onCreatePost = () => {
-        console.log("Plus-Button geklickt");
+        navigation.navigate('Create')
     }
 
     return (

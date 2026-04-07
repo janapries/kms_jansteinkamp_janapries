@@ -4,8 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/RootStack';
 
+
 export function DetailScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    // use Nav braucht die Paramliste wegen der Overload Fehlermeldung, gekommen durch AI nachfrag, NavigationsQuelle war React doc
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

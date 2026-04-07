@@ -1,35 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { Alert, Button, Platform, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { PaperProvider } from 'react-native-paper';
-import CreatePost from './feature/screens/CreatePost';
-import DetailScreen from './feature/screens/DetailScreen';
-import ListView from './feature/screens/ListView';
-
-function showAlert(message: string) {
-  if (Platform.OS === 'web') {
-    window.alert(message);
-  } else {
-    Alert.alert(message);
-  }
-}
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { RootStack } from './navigation/RootStack';
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <PaperProvider>
-        <DetailScreen />
-        <StatusBar style="auto" />
-      </PaperProvider>
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <RootStack />
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
