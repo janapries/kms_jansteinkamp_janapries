@@ -5,7 +5,7 @@ export interface PostData {
     title: string;
     author: string;
     description: string;
-    tags: [];
+    tags: string[];
 }
 export interface Post extends PostData { }
 
