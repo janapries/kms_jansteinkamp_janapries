@@ -24,16 +24,19 @@ export default function CreatePost() {
     const [title, setTitle] = useState(existingPost ? existingPost.title : "");
     const [author, setAuthor] = useState(existingPost ? existingPost.author : "");
     const [description, setDescription] = useState(existingPost ? existingPost.description : "");
-    const [tags, setTags] = useState("");
+    const [tags, setTags] = useState(existingPost ? existingPost.tags : "");
 
     const handleSubmit = () => {
         if (existingPost) {
+            const tagsArray = typeof tags === "string"
+                ? tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "")
+                : tags;
             const updatedPost: Post = {
                 id: existingPost.id,
                 title: title,
                 author: author,
                 description: description,
-                tags: [] as any
+                tags: tagsArray,
             }
             updatePost(updatedPost);
         }
@@ -43,7 +46,7 @@ export default function CreatePost() {
                 title: title,
                 author: author,
                 description: description,
-                tags: [] as any
+                tags: [] as string[]
             };
             addPost(newPost);
         }
@@ -85,7 +88,7 @@ export default function CreatePost() {
                 <TextInput
                     label="Tags"
                     style={styles.input}
-                    value={tags}
+                    value={tags.toString()}
                     onChangeText={tags => setTags(tags)}
                     maxLength={20}
                 />

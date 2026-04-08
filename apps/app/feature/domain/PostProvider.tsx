@@ -15,7 +15,6 @@ const PostContext = createContext<PostState | undefined>(undefined);
 export const PostProvider = ({ children }: { children: ReactNode }) => {
 
     const [posts, setPosts] = useState<Post[]>([
-
     ]);
 
 
@@ -24,7 +23,7 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const removePost = (post: Post) => {
-        const neueListe = posts.filter((post) => post !== post);
+        const neueListe = posts.filter((p) => p !== post);
         setPosts(neueListe);
     };
 
