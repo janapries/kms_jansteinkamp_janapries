@@ -6,25 +6,24 @@ import { Post } from '../domain/Post';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/RootStack';
+import { usePosts } from "../domain/PostProvider";
 
 export default function ListView() {
 
     // use Nav braucht die Paramliste wegen der Overload Fehlermeldung, gekommen durch AI nachfrag, NavigationsQuelle war React doc
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-    const [posts] = useState<Post[]>([
-        {
-            id: "1",
-            title: "Testpost",
-            author: "Jen",
-            description: "Test Post",
-            tags: []
-        },
-    ]);
+    const { posts } = usePosts();
+
 
     const _onCreatePost = () => {
         navigation.navigate('Create')
     }
+
+    const [title, setTitle] = useState("");
+    const [author, setAuthor] = useState("");
+    const [description, setDescription] = useState("");
+    const [tags, setTags] = useState("");
 
     return (
         <View style={styles.container}>
@@ -32,19 +31,19 @@ export default function ListView() {
                 <Appbar.Content title="Posts" />
                 <Appbar.Action icon="plus" onPress={_onCreatePost} />
             </Appbar.Header>
-                <FlatList
-                    data={posts}
-                    keyExtractor={(post) => post.id}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => navigation.navigate('Detail', { id: item.id })}>
-                            <List.Item
-                                title={item.title}
-                                description={`${item.author}: ${item.description}`}
-                                left={props => <List.Icon {...props} icon="text-box" />}
-                            />
-                        </TouchableOpacity>
-                    )}
-                />
+            <FlatList
+                data={posts}
+                keyExtractor={(post) => post.id}
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => navigation.navigate('Detail', { id: item.id })}>
+                        <List.Item
+                            title={item.title}
+                            description={`${item.author}: ${item.description}`}
+                            left={props => <List.Icon {...props} icon="text-box" />}
+                        />
+                    </TouchableOpacity>
+                )}
+            />
         </View>
     );
 };

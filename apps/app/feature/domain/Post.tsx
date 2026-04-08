@@ -1,14 +1,16 @@
-export interface PostData{
+import { useState } from "react";
+
+export interface PostData {
     id: string;
     title: string;
     author: string;
     description: string;
-    tags: string;
+    tags: [];
 }
-export interface Post extends PostData{}
+export interface Post extends PostData { }
 
-export class Post{
-    constructor({id,title, author, description, tags} : PostData){
+export class Post {
+    constructor({ id, title, author, description, tags }: PostData) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -16,4 +18,16 @@ export class Post{
         this.tags = tags;
     }
 
+}
+
+export default function GlobalPosts() {
+    const [posts] = useState<Post[]>([
+        {
+            id: "1",
+            title: "Testpost",
+            author: "Jen",
+            description: "Test Post",
+            tags: []
+        },
+    ]);
 }

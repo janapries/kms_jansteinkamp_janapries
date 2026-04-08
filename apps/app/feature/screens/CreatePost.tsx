@@ -1,22 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Appbar, Button, TextInput } from "react-native-paper";
 import { RootStackParamList } from '../../navigation/RootStack';
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Post } from "../domain/Post";
+import { usePosts } from "../domain/PostProvider";
 
 export default function CreatePost() {
 
-    const _onBack = () => { }
-    const [title, setText] = React.useState("");
-    const [auhtor, setAuthor] = React.useState("");
-    const [description, setDescription] = React.useState("");
-    const [tags, setTags] = React.useState("");
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+    const route = useRoute<RouteProp<RootStackParamList, 'Create'>>();
+    const editId = route.params?.id;
+
+    const { addPost, getPost, updatePost } = usePosts();
+
+    const existingPost = editId ? getPost(editId) : undefined;
+
+    const _onBack = () => {
+        navigation.goBack();
+    }
+    const [title, setTitle] = useState(existingPost ? existingPost.title : "");
+    const [author, setAuthor] = useState(existingPost ? existingPost.author : "");
+    const [description, setDescription] = useState(existingPost ? existingPost.description : "");
+    const [tags, setTags] = useState("");
+
+    const handleSubmit = () => {
+        if (existingPost) {
+            const updatedPost: Post = {
+                id: existingPost.id,
+                title: title,
+                author: author,
+                description: description,
+                tags: [] as any
+            }
+            updatePost(updatedPost);
+        }
+        else {
+            const newPost: Post = {
+                id: Date.now().toString(),
+                title: title,
+                author: author,
+                description: description,
+                tags: [] as any
+            };
+            addPost(newPost);
+        }
+        navigation.navigate('Home');
+    };
+
+    const screenTitle = existingPost ? "Edit Post" : "New Post";
 
     return (
         <View>
             <Appbar.Header>
                 <Appbar.BackAction onPress={_onBack} />
-                <Appbar.Content title="New Post" />
+                <Appbar.Content title={screenTitle} />
             </Appbar.Header>
 
             <View style={styles.content}>
@@ -24,14 +64,14 @@ export default function CreatePost() {
                     label="Title"
                     style={styles.input}
                     value={title}
-                    onChangeText={title => setText(title)}
+                    onChangeText={title => setTitle(title)}
                     maxLength={20}
                 />
                 <TextInput
                     label="Author"
                     style={styles.input}
-                    value={auhtor}
-                    onChangeText={auhtor => setAuthor(auhtor)}
+                    value={author}
+                    onChangeText={author => setAuthor(author)}
                     maxLength={20}
                 />
                 <TextInput
@@ -49,10 +89,8 @@ export default function CreatePost() {
                     onChangeText={tags => setTags(tags)}
                     maxLength={20}
                 />
-                <Button mode="contained" onPress={() => console.log('Pressed')}>
+                <Button mode="contained" onPress={handleSubmit}>
                     Submit
-                    // add post to list
-                    // navigation home
                 </Button>
             </View>
         </View>
