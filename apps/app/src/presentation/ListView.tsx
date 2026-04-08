@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Appbar, List } from 'react-native-paper';
 import { View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { Post } from '../domain/Post';
+import { Post } from '../../domain/Post';
 
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/RootStack';
-import { usePosts } from "../domain/PostProvider";
+import { RootStackParamList } from '../../../navigation/RootStack';
+import { usePosts } from "../../domain/PostProvider";
 
 export default function ListView() {
 
@@ -19,11 +19,6 @@ export default function ListView() {
     const _onCreatePost = () => {
         navigation.navigate('Create')
     }
-
-    const [title, setTitle] = useState("");
-    const [author, setAuthor] = useState("");
-    const [description, setDescription] = useState("");
-    const [tags, setTags] = useState("");
 
     return (
         <View style={styles.container}>

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { Post } from '../domain/Post';
+import { Post } from './Post';
 
 
 interface PostState {
