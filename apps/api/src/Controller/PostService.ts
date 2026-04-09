@@ -15,11 +15,11 @@ export class PostService {
 
     constructor(){
         this.postList = [
-            new Post("1", "Ich hab mich exmatrikuliert", "Das Leben ist endlich gut","Jan",  ["Freiheit", "Leben"]),
-            new Post("2", "Neues Projekt gestartet", "Wir bauen eine REST API mit Express","Jan", ["TypeScript", "Express", "API"]),
-            new Post("3", "Warum ich TypeScript liebe", "Typsicherheit rettet Leben und Nerven","Jan", ["TypeScript", "Dev"]),
-            new Post("4", "Nodemon vs tsx", "Ein Vergleich der beiden Tools für die Entwicklung","Jan", ["Tools", "Node"]),
-            new Post("5", "Middleware verstanden", "Endlich macht next() Sinn für mich","Jan", ["Express", "Lernen"]),
+            new Post("1", "Ich hab mich exmatrikuliert", "Sitze jetzt seit 3 Stunden auf dem Boden. Weiß nicht ob ich weine oder lache. Wahrscheinlich beides.", "Jan", ["Existenzkrise", "Exmatrikulation", "Boden"]),
+            new Post("2", "Was bin ich jetzt eigentlich", "Kein Student mehr. Kein Absolvent. Einfach... nichts. Der Personalausweis sagt auch nichts hilfreiches.", "Jen", ["Identität", "Leere", "WasJetzt"]),
+            new Post("3", "Alle fragen was ich jetzt mache", "Keine Ahnung Karen. Ich starre seit einer Woche die Decke an und überlege ob REST APIs den Sinn des Lebens erklären können.", "Jan", ["Druck", "Gesellschaft", "Decke"]),
+            new Post("4", "Der Uni-Ausweis funktioniert nicht mehr", "Wollte in die Mensa. Karte abgelehnt. Irgendwie passend.", "Jen", ["Realität", "Mensa", "Symbolismus"]),
+            new Post("5", "Es ist 3 Uhr nachts", "Ich baue eine API für eine App die niemand braucht. Aber wenigstens kompiliert TypeScript. Anders als mein Leben.", "Jan", ["Nacht", "TypeScript", "Sinnlosigkeit"]),
         ];
     }
 
