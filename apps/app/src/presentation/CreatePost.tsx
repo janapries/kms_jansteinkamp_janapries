@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Appbar, Button, TextInput } from "react-native-paper";
-import { RootStackParamList } from '../../navigation/RootStack';
+import { RootStackParamList } from '../../../navigation/RootStack';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Post } from "../domain/Post";
-import { usePosts } from "../domain/PostProvider";
+import { Post } from "../../domain/Post";
+import { usePosts } from "../../domain/PostProvider";
 
 export default function CreatePost() {
 

@@ -19,15 +19,3 @@ export class Post {
     }
 
 }
-
-export default function GlobalPosts() {
-    const [posts] = useState<Post[]>([
-        {
-            id: "1",
-            title: "Testpost",
-            author: "Jen",
-            description: "Test Post",
-            tags: []
-        },
-    ]);
-}

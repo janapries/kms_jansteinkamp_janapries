@@ -1,9 +1,9 @@
 import { View, StyleSheet, Text } from "react-native";
 import { Appbar, Button } from "react-native-paper";
-import { RootStackParamList } from '../../navigation/RootStack';
+import { RootStackParamList } from '../../../navigation/RootStack';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { usePosts } from "../domain/PostProvider";
+import { usePosts } from "../../domain/PostProvider";
 
 
 export default function DetailScreen() {

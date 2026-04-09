@@ -1,9 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import ListView from '../feature/screens/ListView'
-import CreatePost from '../feature/screens/CreatePost'
-import DetailScreen from '../feature/screens/DetailScreen'
+import ListView from '../src/presentation/ListView'
+import CreatePost from '../src/presentation/CreatePost'
+import DetailScreen from '../src/presentation/DetailScreen'
 
 export type RootStackParamList = {
   Home: undefined;
