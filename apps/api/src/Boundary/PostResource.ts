@@ -16,12 +16,19 @@ export class PostResource {
     private initRoutes(){
         this.router.get("/:id", this.getById);
         this.router.get("/:id", this.getBySecretId);
+        this.router.post("/", this.addPost);
     }   
        
 
+    // = wegen der pfeilfunktion, da nur hier this sichtabr ist
     getById = async (req: Request, res: Response, next: NextFunction) => {
 
-        const post = this.postService.getPostByID(Number(req.params.id));
+        var postID: string = "";
+        if (req.params.id === typeof(String)){
+            postID = req.params.id;
+        }
+
+        const post = this.postService.getPostByID(postID);
 
         if (req.params.id === "0"){
             return next("route")
@@ -36,7 +43,26 @@ export class PostResource {
 
     getBySecretId = async (req: Request, res: Response, next: NextFunction) => {
 
-        const post = new Post(req.params.id as unknown as number, "Das ist ein geheimer Post", "Sachen mit next Functions amchen spaß", ["Secret"]);
+        var postID: string = "";
+        if (req.params.id === typeof(String)){
+            postID = req.params.id;
+        }
+
+        const post = new Post(postID, "Das ist ein geheimer Post", "Sachen mit next Functions amchen spaß", ["Secret"]);
         res.json(post); 
     };
+
+    addPost = async (req: Request, res: Response) => {
+        const body: Post = req.body;
+
+        const resPost: Post | undefined = this.postService.addPost(body);
+
+        if (resPost === undefined){
+            return res.status(404).json({error: "bad request"})
+        }
+        
+
+        res.json(resPost);
+
+    }
 }

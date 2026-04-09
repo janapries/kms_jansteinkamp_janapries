@@ -1,6 +1,6 @@
 export class Post {
     
-    constructor(id: number, title: string, desription: string, tags: string[]){
+    constructor(id: string, title: string, desription: string, tags: string[]){
         this.id = id
         this.title = title;
         this.desciption = desription;
@@ -9,10 +9,12 @@ export class Post {
 
 
     
-    id: number;
+    id: string;
     title: string;
     desciption: string;
     tags: string[];
+
+
 
 
 }
