@@ -15,7 +15,7 @@ export class PostService {
     }
 
     getPostByID(id: string): Post | undefined {
-        return this.postList.find(post => post.id === id);
+        return this.postList.find(post => post.id == id);
     }
 
     getAllPosts(){
@@ -44,5 +44,16 @@ export class PostService {
 
     updatePost(){}
 
-    deletePost(){}
+    deletePost(id: string): Post | undefined{
+        let postID: number = this.postList.findIndex(post => post.id === id);
+
+        delete this.postList[postID];
+
+        // slice
+
+        console.log(`${postID} gefunden und gesucht habe ich mit ${id}`);
+
+        return undefined;
+        
+    }
 }

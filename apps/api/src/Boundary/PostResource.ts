@@ -17,16 +17,18 @@ export class PostResource {
         this.router.get("/:id", this.getById);
         this.router.get("/:id", this.getBySecretId);
         this.router.post("/", this.addPost);
+        this.router.put("/", this.updatePost)
+        this.router.delete("/:id", this.deletePost)
     }   
        
 
     // = wegen der pfeilfunktion, da nur hier this sichtabr ist
     getById = async (req: Request, res: Response, next: NextFunction) => {
 
-        var postID: string = "";
-        if (req.params.id === typeof(String)){
-            postID = req.params.id;
-        }
+        let postID: string | undefined | string[] = "";
+        
+        postID = req.params.id as string;
+        
 
         const post = this.postService.getPostByID(postID);
 
@@ -43,7 +45,7 @@ export class PostResource {
 
     getBySecretId = async (req: Request, res: Response, next: NextFunction) => {
 
-        var postID: string = "";
+        let postID: string = "";
         if (req.params.id === typeof(String)){
             postID = req.params.id;
         }
@@ -63,6 +65,21 @@ export class PostResource {
         
 
         res.json(resPost);
+    }
 
+    updatePost = async (req: Request, res: Response) => {
+
+    }
+
+    deletePost = async (req: Request, res: Response) => {
+
+        let postID: string | undefined | string[] = "";
+        
+        postID = req.params.id as string;
+
+        this.postService.deletePost(postID);
+
+        res.json("erfolgreich gelöscht")
+        
     }
 }
