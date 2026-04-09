@@ -3,6 +3,15 @@ import { Post } from "../Domain/Post.js";
 export class PostService {
     postList: Post[] = [];
 
+    // singleton von https://stackoverflow.com/questions/30174078/how-to-define-singleton-in-typescript
+    private static _instance: PostService;
+
+
+    public static get Instance()
+    {
+        return this._instance || (this._instance = new this());
+    }
+
 
     constructor(){
         this.postList = [

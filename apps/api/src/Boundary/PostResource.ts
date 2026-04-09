@@ -7,7 +7,7 @@ export class PostResource {
 
     public router = Router();
 
-    postService: PostService = new PostService;
+    private postService = PostService.Instance;
 
     constructor(){
         this.initRoutes();
