@@ -6,11 +6,11 @@ export class PostService {
 
     constructor(){
         this.postList = [
-            new Post("1", "Ich hab mich exmatrikuliert", "Das Leben ist endlich gut", ["Freiheit", "Leben"]),
-            new Post("2", "Neues Projekt gestartet", "Wir bauen eine REST API mit Express", ["TypeScript", "Express", "API"]),
-            new Post("3", "Warum ich TypeScript liebe", "Typsicherheit rettet Leben und Nerven", ["TypeScript", "Dev"]),
-            new Post("4", "Nodemon vs tsx", "Ein Vergleich der beiden Tools für die Entwicklung", ["Tools", "Node"]),
-            new Post("5", "Middleware verstanden", "Endlich macht next() Sinn für mich", ["Express", "Lernen"]),
+            new Post("1", "Ich hab mich exmatrikuliert", "Das Leben ist endlich gut","Jan",  ["Freiheit", "Leben"]),
+            new Post("2", "Neues Projekt gestartet", "Wir bauen eine REST API mit Express","Jan", ["TypeScript", "Express", "API"]),
+            new Post("3", "Warum ich TypeScript liebe", "Typsicherheit rettet Leben und Nerven","Jan", ["TypeScript", "Dev"]),
+            new Post("4", "Nodemon vs tsx", "Ein Vergleich der beiden Tools für die Entwicklung","Jan", ["Tools", "Node"]),
+            new Post("5", "Middleware verstanden", "Endlich macht next() Sinn für mich","Jan", ["Express", "Lernen"]),
         ];
     }
 
@@ -42,14 +42,21 @@ export class PostService {
         return postToAdd;
     }
 
-    updatePost(){}
+    updatePost(){
+
+    }
 
     deletePost(id: string): Post | undefined{
         let postID: number = this.postList.findIndex(post => post.id === id);
 
-        delete this.postList[postID];
+        // Source - https://stackoverflow.com/a/15295806
+        // Posted by blorkfish, modified by community. See post 'Timeline' for change history
+        // Retrieved 2026-04-09, License - CC BY-SA 4.0
+        const index = this.postList.indexOf(this.postList[postID] as any, 0);
+        if (index > -1) {
+        this.postList.splice(index, 1);
+        }
 
-        // slice
 
         console.log(`${postID} gefunden und gesucht habe ich mit ${id}`);
 

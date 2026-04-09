@@ -50,7 +50,7 @@ export class PostResource {
             postID = req.params.id;
         }
 
-        const post = new Post(postID, "Das ist ein geheimer Post", "Sachen mit next Functions amchen spaß", ["Secret"]);
+        const post = new Post(postID, "Das ist ein geheimer Post", "Sachen mit next Functions amchen spaß","Jan", ["Secret"]);
         res.json(post); 
     };
 
@@ -68,6 +68,10 @@ export class PostResource {
     }
 
     updatePost = async (req: Request, res: Response) => {
+
+        
+        
+        
 
     }
 
