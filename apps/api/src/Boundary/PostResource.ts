@@ -17,7 +17,7 @@ export class PostResource {
         this.router.get("/:id", this.getById);
         this.router.get("/:id", this.getBySecretId);
         this.router.post("/", this.addPost);
-        this.router.put("/", this.updatePost)
+        this.router.put("/:id", this.updatePost)
         this.router.delete("/:id", this.deletePost)
     }   
        
@@ -69,9 +69,16 @@ export class PostResource {
 
     updatePost = async (req: Request, res: Response) => {
 
+        const body: Post = req.body;
+
+        const resPost: Post | undefined = this.postService.updatePost(body);
+
+        if (resPost === undefined){
+            return res.status(404).json({error: "bad request"})
+        }
         
-        
-        
+
+        res.json(resPost);
 
     }
 

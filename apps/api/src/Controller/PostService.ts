@@ -42,8 +42,17 @@ export class PostService {
         return postToAdd;
     }
 
-    updatePost(){
+    updatePost(newPost: Post): Post | undefined {
+        const index = this.postList.findIndex(post => post.id === newPost.id);
 
+        if (index === -1) {
+            console.log(`[PostService] updatePost fehlgeschlagen: Post mit ID ${newPost.id} nicht gefunden`);
+            return undefined;
+        }
+
+        this.postList[index] = newPost;
+        console.log(`[PostService] Post mit ID ${newPost.id} erfolgreich aktualisiert`);
+        return this.postList[index];
     }
 
     deletePost(id: string): Post | undefined{
