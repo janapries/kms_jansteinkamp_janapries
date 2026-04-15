@@ -6,13 +6,16 @@ interface PostState {
     posts: Post[];
     addPost: (newPost: Post) => void;
     removePost: (postToDelete: Post) => void;
-    getPost: (id: string) => Post | undefined;
+    getPost: (id: string) => Promise<Post | undefined>;
     updatePost: (updatedPost: Post) => void;
 }
 
 const PostContext = createContext<PostState | undefined>(undefined);
 
 export const PostProvider = ({ children }: { children: ReactNode }) => {
+
+
+
 
     const [posts, setPosts] = useState<Post[]>([
     ]);
@@ -27,9 +30,16 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
         setPosts(neueListe);
     };
 
-    const getPost = (id: string) => {
-
-        return posts.find((post) => post.id === id);
+    const getPost = async (id: string): Promise<Post | undefined> => {
+        try {
+            const response = await fetch(`http://localhost:3000/post/${id}`);
+            if (!response.ok) throw new Error('Fehler beim Laden');
+            const json = await response.json();
+            return json as Post;
+        } catch (error) {
+            console.error(error);
+            return undefined;
+        }
     };
 
     const updatePost = (updatedPost: Post) => {

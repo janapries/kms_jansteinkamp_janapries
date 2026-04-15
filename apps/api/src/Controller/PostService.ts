@@ -31,7 +31,7 @@ export class PostService {
         return this.postList;
     }
 
-    // console logs per ai eingesetzt
+    // console logs per ai eingesetzt => aus debug gründen, hatte einen fehler bei dem hinzufügen
     addPost(postToAdd: Post): Post | undefined {
         console.log(`[PostService] addPost aufgerufen mit:`, postToAdd);
 
