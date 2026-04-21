@@ -1,10 +1,19 @@
 import { Post } from "../Domain/Post.js";
+import { PostRepository } from "../Gateway/PostRepository.js";
+
+
+type PostResult = {
+  id: number;
+  name: string | null;
+} | null;
 
 export class PostService {
     postList: Post[] = [];
 
     // singleton von https://stackoverflow.com/questions/30174078/how-to-define-singleton-in-typescript
     private static _instance: PostService;
+
+    private repo: PostRepository = new PostRepository;
 
 
     public static get Instance()
@@ -24,11 +33,19 @@ export class PostService {
     }
 
     getPostByID(id: string): Post | undefined {
+        console.log("BBBB")
         return this.postList.find(post => post.id == id);
     }
 
     getAllPosts(){
         return this.postList;
+    }
+
+    getFirstPost(): Promise<PostResult> | undefined {
+        console.log("aaaa")
+        this.repo.getUser();
+        return undefined;
+
     }
 
     // console logs per ai eingesetzt => aus debug gründen, hatte einen fehler bei dem hinzufügen

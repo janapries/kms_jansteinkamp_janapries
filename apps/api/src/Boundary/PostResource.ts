@@ -16,6 +16,7 @@ export class PostResource {
     private initRoutes(){
         this.router.get("/:id", this.getById);
         this.router.get("/:id", this.getBySecretId);
+        this.router.get("/", this.getByTest); 
         this.router.post("/", this.addPost);
         this.router.put("/:id", this.updatePost);
         this.router.delete("/:id", this.deletePost);
@@ -41,6 +42,12 @@ export class PostResource {
         }
 
         res.json(post);
+    };
+
+    getByTest = async (req: Request, res: Response, next: NextFunction) => {
+        console.log("Request bekommen")
+        var data = this.postService.getFirstPost();
+        res.json(this.postService.getFirstPost);
     };
 
     getBySecretId = async (req: Request, res: Response, next: NextFunction) => {

@@ -1,3 +1,5 @@
+
+
 export class Post {
     
     constructor(id: string, title: string, desription: string, author: string, tags: string[]){
@@ -20,3 +22,5 @@ export class Post {
 
 
 }
+
+
