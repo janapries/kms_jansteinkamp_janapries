@@ -1,30 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Appbar, Button, TextInput } from "react-native-paper";
-import { RootStackParamList } from '../../../navigation/RootStack';
+import { RootStackParamList } from '../../navigation/RootStack';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Post } from "../../domain/Post";
-import { usePosts } from "../../domain/PostProvider";
+import { Post } from "../domain/Post";
+import { usePosts } from "../domain/PostProvider";
 
 export default function CreatePost() {
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
     const route = useRoute<RouteProp<RootStackParamList, 'Create'>>();
     const editId = route.params?.id;
 
     const { addPost, getPost, updatePost } = usePosts();
 
-    const existingPost = editId ? getPost(editId) : undefined;
+    const [existingPost, setExistingPost] = useState<Post | undefined>(undefined);
+    const [title, setTitle] = useState("");
+    const [author, setAuthor] = useState("");
+    const [description, setDescription] = useState("");
+    const [tags, setTags] = useState<string | string[]>("");
+
+    // Post laden wenn editId vorhanden
+    useEffect(() => {
+        if (editId) {
+            const load = async () => {
+                const post = await getPost(editId);
+                setExistingPost(post);
+            };
+            load();
+        }
+    }, [editId]);
+
+    // Felder befüllen sobald existingPost geladen ist
+    useEffect(() => {
+        if (existingPost) {
+            setTitle(existingPost.title);
+            setAuthor(existingPost.author);
+            setDescription(existingPost.description);
+            setTags(existingPost.tags);
+        }
+    }, [existingPost]);
 
     const _onBack = () => {
         navigation.goBack();
-    }
-    const [title, setTitle] = useState(existingPost ? existingPost.title : "");
-    const [author, setAuthor] = useState(existingPost ? existingPost.author : "");
-    const [description, setDescription] = useState(existingPost ? existingPost.description : "");
-    const [tags, setTags] = useState(existingPost ? existingPost.tags : "");
+    };
 
     const handleSubmit = () => {
         if (existingPost) {
@@ -33,19 +53,18 @@ export default function CreatePost() {
                 : tags;
             const updatedPost: Post = {
                 id: existingPost.id,
-                title: title,
-                author: author,
-                description: description,
+                title,
+                author,
+                description,
                 tags: tagsArray,
-            }
+            };
             updatePost(updatedPost);
-        }
-        else {
+        } else {
             const newPost: Post = {
                 id: Date.now().toString(),
-                title: title,
-                author: author,
-                description: description,
+                title,
+                author,
+                description,
                 tags: [] as string[]
             };
             addPost(newPost);
@@ -61,27 +80,26 @@ export default function CreatePost() {
                 <Appbar.BackAction onPress={_onBack} />
                 <Appbar.Content title={screenTitle} />
             </Appbar.Header>
-
             <View style={styles.content}>
                 <TextInput
                     label="Title"
                     style={styles.input}
                     value={title}
-                    onChangeText={title => setTitle(title)}
+                    onChangeText={setTitle}
                     maxLength={20}
                 />
                 <TextInput
                     label="Author"
                     style={styles.input}
                     value={author}
-                    onChangeText={author => setAuthor(author)}
+                    onChangeText={setAuthor}
                     maxLength={20}
                 />
                 <TextInput
                     label="Description"
                     style={styles.input_description}
                     value={description}
-                    onChangeText={description => setDescription(description)}
+                    onChangeText={setDescription}
                     multiline={true}
                     maxLength={50}
                 />
@@ -89,7 +107,7 @@ export default function CreatePost() {
                     label="Tags"
                     style={styles.input}
                     value={tags.toString()}
-                    onChangeText={tags => setTags(tags)}
+                    onChangeText={setTags}
                     maxLength={20}
                 />
                 <Button mode="contained" onPress={handleSubmit}>
@@ -97,8 +115,7 @@ export default function CreatePost() {
                 </Button>
             </View>
         </View>
-
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -121,6 +138,5 @@ const styles = StyleSheet.create({
         borderColor: '#cccccc',
         minHeight: 150,
         borderRadius: 8,
-
     }
 });

@@ -1,38 +1,67 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { Post } from './Post';
 
+const BASE_URL = 'http://10.0.2.2:3000'; 
 
 interface PostState {
     posts: Post[];
-    addPost: (newPost: Post) => void;
-    removePost: (postToDelete: Post) => void;
+    addPost: (newPost: Post) => Promise<void>;
+    removePost: (postToDelete: Post) => Promise<void>;
     getPost: (id: string) => Promise<Post | undefined>;
-    updatePost: (updatedPost: Post) => void;
+    updatePost: (updatedPost: Post) => Promise<void>;
 }
 
 const PostContext = createContext<PostState | undefined>(undefined);
 
 export const PostProvider = ({ children }: { children: ReactNode }) => {
 
+    const [posts, setPosts] = useState<Post[]>([]);
 
+    // Alle Posts beim Start laden
+    useEffect(() => {
+        const loadPosts = async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/posts`);
+                if (!response.ok) throw new Error('Fehler beim Laden');
+                const json = await response.json();
+                setPosts(json);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        loadPosts();
+    }, []);
 
-
-    const [posts, setPosts] = useState<Post[]>([
-    ]);
-
-
-    const addPost = (newPost: Post) => {
-        setPosts([newPost, ...posts]);
+    const addPost = async (newPost: Post): Promise<void> => {
+        try {
+            const response = await fetch(`${BASE_URL}/post`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newPost),
+            });
+            if (!response.ok) throw new Error('Fehler beim Erstellen');
+            const created = await response.json();
+            setPosts(prev => [created, ...prev]);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    const removePost = (post: Post) => {
-        const neueListe = posts.filter((p) => p !== post);
-        setPosts(neueListe);
+    const removePost = async (post: Post): Promise<void> => {
+        try {
+            const response = await fetch(`${BASE_URL}/post/${post.id}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) throw new Error('Fehler beim Löschen');
+            setPosts(prev => prev.filter(p => p.id !== post.id));
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const getPost = async (id: string): Promise<Post | undefined> => {
         try {
-            const response = await fetch(`http://localhost:3000/post/${id}`);
+            const response = await fetch(`${BASE_URL}/post/${id}`);
             if (!response.ok) throw new Error('Fehler beim Laden');
             const json = await response.json();
             return json as Post;
@@ -42,11 +71,19 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const updatePost = (updatedPost: Post) => {
-        const neueListe = posts.map(post =>
-            post.id === updatedPost.id ? updatedPost : post
-        );
-        setPosts(neueListe);
+    const updatePost = async (updatedPost: Post): Promise<void> => {
+        try {
+            const response = await fetch(`${BASE_URL}/post/${updatedPost.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedPost),
+            });
+            if (!response.ok) throw new Error('Fehler beim Aktualisieren');
+            const updated = await response.json();
+            setPosts(prev => prev.map(p => p.id === updated.id ? updated : p));
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -55,7 +92,6 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
         </PostContext.Provider>
     );
 };
-
 
 export const usePosts = () => {
     const context = useContext(PostContext);
