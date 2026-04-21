@@ -1,18 +1,23 @@
 {
-  "name": "db",
+  "name": "@repo/db",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "exports": {
+    "./lib/prisma": "./lib/prisma.ts"
+  },
   "scripts": {
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^22.19.15",
+    "@types/node": "^22.19.17",
     "prisma": "^6.19.2"
   },
   "dependencies": {

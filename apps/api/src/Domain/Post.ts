@@ -5,7 +5,7 @@ export class Post {
     constructor(id: string, title: string, desription: string, author: string, tags: string[]){
         this.id = id
         this.title = title;
-        this.desciption = desription;
+        this.description = desription;
         this.author = author;
         this.tags = tags;
     }
@@ -14,7 +14,7 @@ export class Post {
     
     id: string;
     title: string;
-    desciption: string;
+    description: string;
     author: string;
     tags: string[];
 
