@@ -1,38 +1,46 @@
 import { Post } from "../Domain/Post.js";
+import { PostRepository } from "../Gateway/PostRepository.js";
+
 
 export class PostService {
-    postList: Post[] = [];
 
     // singleton von https://stackoverflow.com/questions/30174078/how-to-define-singleton-in-typescript
     private static _instance: PostService;
 
+    private repo: PostRepository = new PostRepository();
 
-    public static get Instance()
-    {
+
+    public static get Instance() {
         return this._instance || (this._instance = new this());
     }
 
 
-    constructor(){
-        this.postList = [
-            new Post("1", "Ich hab mich exmatrikuliert", "Sitze jetzt seit 3 Stunden auf dem Boden. Weiß nicht ob ich weine oder lache. Wahrscheinlich beides.", "Jan", ["Existenzkrise", "Exmatrikulation", "Boden"]),
-            new Post("2", "Was bin ich jetzt eigentlich", "Kein Student mehr. Kein Absolvent. Einfach... nichts. Der Personalausweis sagt auch nichts hilfreiches.", "Jen", ["Identität", "Leere", "WasJetzt"]),
-            new Post("3", "Alle fragen was ich jetzt mache", "Keine Ahnung Karen. Ich starre seit einer Woche die Decke an und überlege ob REST APIs den Sinn des Lebens erklären können.", "Jan", ["Druck", "Gesellschaft", "Decke"]),
-            new Post("4", "Der Uni-Ausweis funktioniert nicht mehr", "Wollte in die Mensa. Karte abgelehnt. Irgendwie passend.", "Jen", ["Realität", "Mensa", "Symbolismus"]),
-            new Post("5", "Es ist 3 Uhr nachts", "Ich baue eine API für eine App die niemand braucht. Aber wenigstens kompiliert TypeScript. Anders als mein Leben.", "Jan", ["Nacht", "TypeScript", "Sinnlosigkeit"]),
-        ];
+    private constructor() {
+        // Keine In-Memory-Liste mehr - Posts kommen aus der DB
     }
 
-    getPostByID(id: string): Post | undefined {
-        return this.postList.find(post => post.id == id);
+
+    async getPostByID(id: string): Promise<Post | undefined> {
+        console.log(`[PostService] getPostByID aufgerufen mit id=${id}`);
+        return this.repo.getPostById(id);
     }
 
-    getAllPosts(){
-        return this.postList;
+
+    async getAllPosts(): Promise<Post[]> {
+        console.log(`[PostService] getAllPosts aufgerufen`);
+        return this.repo.getAllPosts();
     }
+
+
+    async getFirstPost(): Promise<Post | undefined> {
+        console.log(`[PostService] getFirstPost aufgerufen`);
+        const all = await this.repo.getAllPosts();
+        return all[0];
+    }
+
 
     // console logs per ai eingesetzt => aus debug gründen, hatte einen fehler bei dem hinzufügen
-    addPost(postToAdd: Post): Post | undefined {
+    async addPost(postToAdd: Post): Promise<Post | undefined> {
         console.log(`[PostService] addPost aufgerufen mit:`, postToAdd);
 
         if (postToAdd === undefined) {
@@ -40,45 +48,52 @@ export class PostService {
             return undefined;
         }
 
-        if (this.postList.find(post => post.id === postToAdd.id)) {
-            console.log(`[PostService] addPost fehlgeschlagen: Post mit ID ${postToAdd.id} existiert bereits`);
+        try {
+            const created = await this.repo.addPost(postToAdd);
+            console.log(`[PostService] Post erfolgreich hinzugefügt mit ID ${created.id}`);
+            return created;
+        } catch (err) {
+            console.error(`[PostService] addPost fehlgeschlagen:`, err);
             return undefined;
         }
-
-        this.postList.push(postToAdd);
-        console.log(`[PostService] Post erfolgreich hinzugefügt. Liste hat jetzt ${this.postList.length} Einträge`);
-
-        return postToAdd;
     }
 
-    updatePost(newPost: Post): Post | undefined {
-        const index = this.postList.findIndex(post => post.id === newPost.id);
 
-        if (index === -1) {
+    async updatePost(newPost: Post): Promise<Post | undefined> {
+        console.log(`[PostService] updatePost aufgerufen mit:`, newPost);
+
+        const updated = await this.repo.updatePost(newPost);
+
+        if (updated === undefined) {
             console.log(`[PostService] updatePost fehlgeschlagen: Post mit ID ${newPost.id} nicht gefunden`);
             return undefined;
         }
 
-        this.postList[index] = newPost;
         console.log(`[PostService] Post mit ID ${newPost.id} erfolgreich aktualisiert`);
-        return this.postList[index];
+        return updated;
     }
 
-    deletePost(id: string): Post | undefined{
-        let postID: number = this.postList.findIndex(post => post.id === id);
 
-        // Source - https://stackoverflow.com/a/15295806
-        // Posted by blorkfish, modified by community. See post 'Timeline' for change history
-        // Retrieved 2026-04-09, License - CC BY-SA 4.0
-        const index = this.postList.indexOf(this.postList[postID] as any, 0);
-        if (index > -1) {
-        this.postList.splice(index, 1);
+    async deletePost(id: string): Promise<boolean> {
+        console.log(`[PostService] deletePost aufgerufen mit id=${id}`);
+
+        const deleted = await this.repo.deletePost(id);
+
+        if (!deleted) {
+            console.log(`[PostService] deletePost fehlgeschlagen: Post mit ID ${id} nicht gefunden`);
+            return false;
         }
 
+        console.log(`[PostService] Post mit ID ${id} erfolgreich gelöscht`);
+        return true;
+    }
 
-        console.log(`${postID} gefunden und gesucht habe ich mit ${id}`);
 
-        return undefined;
-        
+    /**
+     * Hilfsmethode: Legt einen Demo-Post an. Praktisch zum Testen.
+     */
+    async addDemoPost(): Promise<Post> {
+        console.log(`[PostService] addDemoPost aufgerufen`);
+        return this.repo.addDemoPost();
     }
 }
