@@ -1,9 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import ListView from '../src/presentation/PostListScreen'
-import CreatePost from '../src/presentation/PostFormScreen'
-import DetailScreen from '../src/presentation/PostDetailScreen'
+import PostListScreen from '../src/presentation/PostListScreen';
+import PostFormScreen from '../src/presentation/PostFormScreen';
+import PostDetailScreen from '../src/presentation/PostDetailScreen';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -17,9 +17,9 @@ const Stack = createNativeStackNavigator();
 export function RootStack() {
   return (
     <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={ListView} />
-      <Stack.Screen name="Create" component={CreatePost} />
-      <Stack.Screen name="Detail" component={DetailScreen} />
+      <Stack.Screen name="Home" component={PostListScreen} />
+      <Stack.Screen name="Create" component={PostFormScreen} />
+      <Stack.Screen name="Detail" component={PostDetailScreen} />
     </Stack.Navigator>
   );
 }
