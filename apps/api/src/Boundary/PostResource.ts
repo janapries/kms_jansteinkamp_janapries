@@ -16,7 +16,6 @@ export class PostResource {
     private initRoutes() {
         this.router.get("/:id", this.getById);
         this.router.get("/:id", this.getBySecretId);
-        this.router.get("/", this.getByTest);
         this.router.post("/", this.addPost);
         this.router.put("/:id", this.updatePost);
         this.router.delete("/:id", this.deletePost);

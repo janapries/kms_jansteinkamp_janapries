@@ -1,17 +1,18 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { Post } from './Post';
+import { createContext, ReactNode, useState, useEffect } from "react";
+import { Platform } from "react-native";
+import { Post } from "../../../api/src/Domain/Post";
 
-const BASE_URL = 'http://10.0.2.2:3000'; 
+const BASE_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
 
 interface PostState {
     posts: Post[];
     addPost: (newPost: Post) => Promise<void>;
-    removePost: (postToDelete: Post) => Promise<void>;
+    removePost: (postId: string) => Promise<void>;
     getPost: (id: string) => Promise<Post | undefined>;
     updatePost: (updatedPost: Post) => Promise<void>;
 }
 
-const PostContext = createContext<PostState | undefined>(undefined);
+export const PostContext = createContext<PostState | undefined>(undefined);
 
 export const PostProvider = ({ children }: { children: ReactNode }) => {
 
@@ -47,13 +48,13 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const removePost = async (post: Post): Promise<void> => {
+    const removePost = async (postId: string): Promise<void> => {
         try {
-            const response = await fetch(`${BASE_URL}/post/${post.id}`, {
+            const response = await fetch(`${BASE_URL}/post/${postId}`, {
                 method: 'DELETE',
             });
             if (!response.ok) throw new Error('Fehler beim Löschen');
-            setPosts(prev => prev.filter(p => p.id !== post.id));
+            setPosts(prev => prev.filter(p => p.id !== postId));
         } catch (error) {
             console.error(error);
         }
@@ -91,10 +92,4 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
             {children}
         </PostContext.Provider>
     );
-};
-
-export const usePosts = () => {
-    const context = useContext(PostContext);
-    if (!context) throw new Error("usePosts muss in einem PostProvider sein!");
-    return context;
 };

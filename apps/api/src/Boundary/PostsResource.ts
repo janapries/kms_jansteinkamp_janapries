@@ -1,22 +1,22 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
-import { Post } from "../Domain/Post.js";
 import { PostService } from "../Controller/PostService.js";
 
-export class PostsResource{
+export class PostsResource {
     public router = Router();
 
     private postService = PostService.Instance;
 
-    constructor(){
+    constructor() {
         this.initRoutes();
     }
 
-    private initRoutes(){
+    private initRoutes() {
         this.router.get("/", this.getAllPosts);
-    }   
+    }
 
-    getAllPosts = async(req: Request, res: Response) => {
-        res.json(this.postService.getAllPosts())
+    getAllPosts = async (req: Request, res: Response) => {
+        const posts = await this.postService.getAllPosts();
+        res.json(posts || []);
     };
-      
+
 }
