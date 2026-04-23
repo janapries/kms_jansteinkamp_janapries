@@ -5,7 +5,7 @@ import { View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../navigation/RootStack';
-import { usePosts } from "../../hooks/usePosts";
+import { usePosts } from "../hooks/usePosts";
 
 export default function ListView() {
 

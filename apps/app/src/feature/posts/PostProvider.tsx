@@ -1,8 +1,6 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
-import { Platform } from "react-native";
 import { Post } from "../../../../api/src/Domain/Post";
-
-const BASE_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
+import { apiRequest } from "../../utils/apiClient";
 
 interface PostState {
     posts: Post[];
@@ -18,72 +16,53 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
 
     const [posts, setPosts] = useState<Post[]>([]);
 
+    const refreshPosts = async () => {
+        try {
+            const data = await apiRequest('posts');
+            setPosts(data);
+        } catch (error) {
+            console.error("Fehler beim Erneuern der Posts:", error);
+        }
+    };
+
     // Alle Posts beim Start laden
     useEffect(() => {
-        const loadPosts = async () => {
-            try {
-                const response = await fetch(`${BASE_URL}/posts`);
-                if (!response.ok) throw new Error('Fehler beim Laden');
-                const json = await response.json();
-                setPosts(json);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        loadPosts();
+        refreshPosts();
     }, []);
 
     const addPost = async (newPost: Post): Promise<void> => {
         try {
-            const response = await fetch(`${BASE_URL}/post`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newPost),
-            });
-            if (!response.ok) throw new Error('Fehler beim Erstellen');
-            const created = await response.json();
-            setPosts(prev => [created, ...prev]);
+            const created = await apiRequest('post', 'POST', newPost);
+            refreshPosts();
         } catch (error) {
-            console.error(error);
+            console.error("Erstellen fehlgeschlagen:", error);
         }
     };
 
     const removePost = async (postId: string): Promise<void> => {
         try {
-            const response = await fetch(`${BASE_URL}/post/${postId}`, {
-                method: 'DELETE',
-            });
-            if (!response.ok) throw new Error('Fehler beim Löschen');
-            setPosts(prev => prev.filter(p => p.id !== postId));
+            await apiRequest(`post/${postId}`, 'DELETE');
+            refreshPosts();
         } catch (error) {
-            console.error(error);
+            console.error("Löschen fehlgeschlagen:", error);
         }
     };
 
     const getPost = async (id: string): Promise<Post | undefined> => {
         try {
-            const response = await fetch(`${BASE_URL}/post/${id}`);
-            if (!response.ok) throw new Error('Fehler beim Laden');
-            const json = await response.json();
-            return json as Post;
+            return await apiRequest(`post/${id}`);
         } catch (error) {
-            console.error(error);
+            console.error("Einzelner Abruf fehlgeschlagen:", error);
             return undefined;
         }
     };
 
     const updatePost = async (updatedPost: Post): Promise<void> => {
         try {
-            const response = await fetch(`${BASE_URL}/post/${updatedPost.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedPost),
-            });
-            if (!response.ok) throw new Error('Fehler beim Aktualisieren');
-            const updated = await response.json();
-            setPosts(prev => prev.map(p => p.id === updated.id ? updated : p));
+            const updated = await apiRequest(`post/${updatedPost.id}`, 'PUT', updatedPost);
+            refreshPosts();
         } catch (error) {
-            console.error(error);
+            console.error("Update fehlgeschlagen:", error);
         }
     };
 
