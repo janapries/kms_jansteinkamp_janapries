@@ -1,9 +1,8 @@
 import { View, StyleSheet, Text } from "react-native";
 import { Appbar, Button, } from "react-native-paper";
-import { RootStackParamList } from '../../navigation/RootStack';
+import { RootStackParamList } from '../../../../navigation/RootStack';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { usePostForm } from "../hooks/usePostForm";
 import { usePosts } from "../hooks/usePosts";
 import { usePost } from "../hooks/usePost";
 
@@ -33,7 +32,6 @@ export default function CreatePost() {
                 <Text style={styles.title}>{post.title}</Text>
                 <Text style={styles.author}>Von: {post.author}</Text>
                 <Text style={styles.description}>{post.description}</Text>
-
             </View>
 
             <View style={styles.content}>

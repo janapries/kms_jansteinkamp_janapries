@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { Appbar, Button, TextInput } from "react-native-paper";
-import { RootStackParamList } from '../../navigation/RootStack';
+import { RootStackParamList } from '../../../../navigation/RootStack';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { usePostForm } from "../hooks/usePostForm";

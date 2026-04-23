@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePosts } from "./usePosts";
-import { Post } from "../../../api/src/Domain/Post";
+import { Post } from "../../../../../api/src/Domain/Post";
 
 // apps/app/hooks/usePostForm.ts
 export const usePostForm = (editId?: string) => {

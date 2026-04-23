@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePosts } from "./usePosts";
-import { Post } from "../../../api/src/Domain/Post";
+import { Post } from "../../../../../api/src/Domain/Post";
 
 export const usePost = (id?: string) => {
     const { getPost } = usePosts();

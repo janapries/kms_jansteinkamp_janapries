@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
 import { Platform } from "react-native";
-import { Post } from "../../../api/src/Domain/Post";
+import { Post } from "../../../../api/src/Domain/Post";
 
 const BASE_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
 
