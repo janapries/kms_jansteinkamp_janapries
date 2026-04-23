@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { usePosts } from "../hooks/usePosts";
 import { usePost } from "../hooks/usePost";
 
-export default function CreatePost() {
+export default function PostDetailScreen() {
 
     const { removePost } = usePosts();
 

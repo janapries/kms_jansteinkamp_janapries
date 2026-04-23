@@ -7,7 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../navigation/RootStack';
 import { usePosts } from "../hooks/usePosts";
 
-export default function ListView() {
+export default function PostListScreen() {
 
     // use Nav braucht die Paramliste wegen der Overload Fehlermeldung, gekommen durch AI nachfrag, NavigationsQuelle war React doc
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();

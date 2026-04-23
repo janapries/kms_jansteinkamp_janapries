@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { usePosts } from "./usePosts";
 import { Post } from "../../../../../api/src/Domain/Post";
 
-// apps/app/hooks/usePostForm.ts
+
 export const usePostForm = (editId?: string) => {
     const { addPost, updatePost, getPost } = usePosts();
     const [title, setTitle] = useState("");

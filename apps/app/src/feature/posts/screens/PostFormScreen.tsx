@@ -5,7 +5,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { usePostForm } from "../hooks/usePostForm";
 
-export default function CreatePost() {
+export default function PostFormScreen() {
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const route = useRoute<RouteProp<RootStackParamList, 'Create'>>();
