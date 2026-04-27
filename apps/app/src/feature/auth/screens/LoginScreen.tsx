@@ -4,6 +4,8 @@ import { useLoginForm } from "../hooks/useLoginForm"
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/RootStack";
+import { PasswordInput } from "../components/passwordInput";
+import { useState } from "react";
 
 export default function LoginScreen() {
 
@@ -11,40 +13,39 @@ export default function LoginScreen() {
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+    const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+    const toggleVisibility = () => setIsPasswordHidden(!isPasswordHidden);
+
     return (
         <View>
             <Appbar.Header>
                 <Appbar.Content title={'Login'} />
             </Appbar.Header>
             <View style={styles.content}>
-                <TextInput style={styles.input}
+                <TextInput
                     mode="outlined"
                     label="Username"
                     value={form.username}
                     onChangeText={text => form.setUsername(text)}
                 />
-                <TextInput style={styles.input}
-                    mode="outlined"
+                <PasswordInput
                     label="Password"
                     value={form.password}
-                    onChangeText={text => form.setPassword(text)}
-                    secureTextEntry
-                    right={<TextInput.Icon icon="eye" />}
+                    onChangeText={form.setPassword}
+                    secureTextEntry={isPasswordHidden}
+                    onIconPressed={toggleVisibility}
                 />
-                <Button style={styles.input} mode="contained" onPress={() => console.log('Pressed')}>
+                <Button mode="contained" onPress={() => console.log('Pressed')}>
                     Login
                 </Button>
-                <Text onPress={()=> console.log('Press Routing')} variant="labelMedium" style={styles.hyperlink}>Need an account? Sign up here!</Text>
+                <Text onPress={() => console.log('Press Routing')} variant="labelMedium" style={styles.hyperlink}>Need an account? Sign up here!</Text>
             </View>
         </View>)
 }
 const styles = StyleSheet.create({
     content: {
         padding: 16,
-    },
-    input: {
-        marginBottom: 8,
-        marginTop: 8,
+        gap: 8
     },
     hyperlink: {
         padding: 8,
