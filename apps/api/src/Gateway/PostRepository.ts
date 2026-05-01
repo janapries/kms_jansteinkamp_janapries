@@ -1,9 +1,10 @@
 import { prisma } from "@repo/db/lib/prisma";
 import { Post } from "../Domain/Post.js";
-import type { Author } from "../Domain/Author.js";
+import { Author } from "../Domain/Author.js";
 
 export class PostRepository {
 
+    // https://www.prisma.io/docs/v6/orm/prisma-client/queries/relation-queries
     public async getAllPosts(): Promise<Post[]> {
         const posts = await prisma.post.findMany(
             {
@@ -17,7 +18,6 @@ export class PostRepository {
         )
 
         return posts.map(this.toDomain);
-
     }
 
     public async getPostById(id: string): Promise<Post | undefined> {
@@ -26,19 +26,31 @@ export class PostRepository {
 
         const post = await prisma.post.findUnique({
             where: { id: numericId },
+            include: {
+                author: true
+            }
         });
 
         return post ? this.toDomain(post) : undefined;
     }
 
+    // relationen müssen connected werden. Keine raw objs, daher connect mit fk prop
     public async addPost(post: Post): Promise<Post> {
         const created = await prisma.post.create({
             data: {
                 title: post.title,
                 description: post.description,
-                author: post.author,
+                author: {
+                    connect:
+                    {
+                        id: post.authorId
+                    }
+                },
                 tags: post.tags.join(","),
             },
+            include:{
+                author: true
+            }
         });
         return this.toDomain(created);
     }
@@ -53,9 +65,16 @@ export class PostRepository {
                 data: {
                     title: post.title,
                     description: post.description,
-                    author: post.author,
+                    author: {
+                        connect: {
+                            id: post.authorId
+                        }
+                    },
                     tags: post.tags.join(","),
                 },
+                include: {
+                    author: true
+                }
             });
             return this.toDomain(updated);
         } catch {
@@ -75,17 +94,6 @@ export class PostRepository {
         }
     }
 
-    public async addDemoPost(): Promise<Post> {
-        const created = await prisma.post.create({
-            data: {
-                title: `Demo Post ${Date.now()}`,
-                description: "Das ist ein automatisch generierter Demo-Post.",
-                author: "DemoAuthor",
-                tags: "demo,test,automated",
-            },
-        });
-        return this.toDomain(created);
-    }
 
     private toDomain(dbPost: {
         id: number;
