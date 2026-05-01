@@ -1,12 +1,14 @@
+import type { Author } from "./Author.js";
 
 
 export class Post {
     
-    constructor(id: string, title: string, description: string, author: string, tags: string[]){
+    constructor(id: string, title: string, description: string, author: Author, authorId: number, tags: string[]){
         this.id = id
         this.title = title;
         this.description = description;
         this.author = author;
+        this.authorId = authorId;
         this.tags = tags;
     }
 
@@ -15,7 +17,8 @@ export class Post {
     id: string;
     title: string;
     description: string;
-    author: string;
+    author: Author;
+    authorId: number;
     tags: string[];
 
 

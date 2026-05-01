@@ -1,13 +1,23 @@
 import { prisma } from "@repo/db/lib/prisma";
 import { Post } from "../Domain/Post.js";
+import type { Author } from "../Domain/Author.js";
 
 export class PostRepository {
 
     public async getAllPosts(): Promise<Post[]> {
-        const posts = await prisma.post.findMany({
-            orderBy: { createdAt: "desc" },
-        });
+        const posts = await prisma.post.findMany(
+            {
+                include: {
+                    author: true
+                },
+                orderBy: {
+                    createdAt: "asc"
+                }
+            }
+        )
+
         return posts.map(this.toDomain);
+
     }
 
     public async getPostById(id: string): Promise<Post | undefined> {
@@ -81,15 +91,24 @@ export class PostRepository {
         id: number;
         title: string;
         description: string;
-        author: string;
+        authorId: number;
         tags: string;
+
+        author: {
+            id:         number
+            name:       string
+            email:      string
+            password:   string
+        }
     }): Post {
         return new Post(
             String(dbPost.id),
             dbPost.title,
             dbPost.description,
             dbPost.author,
+            dbPost.authorId,
             dbPost.tags ? dbPost.tags.split(",") : [],
         );
     }
+
 }
