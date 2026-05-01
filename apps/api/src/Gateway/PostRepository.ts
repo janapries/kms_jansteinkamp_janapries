@@ -95,25 +95,33 @@ export class PostRepository {
     }
 
 
+
     private toDomain(dbPost: {
         id: number;
         title: string;
         description: string;
         authorId: number;
         tags: string;
-
         author: {
-            id:         number
-            name:       string
-            email:      string
-            password:   string
+            id:       number
+            name:     string
+            email:    string
+            password: string
         }
     }): Post {
+        const author = new Author(        // ← Author-Instanz erstellen
+            String(dbPost.author.id),
+            dbPost.author.name,
+            dbPost.author.email,
+            dbPost.author.password,
+            []                            // ← posts leer lassen (zirkuläre Referenz vermeiden)
+        );
+
         return new Post(
             String(dbPost.id),
             dbPost.title,
             dbPost.description,
-            dbPost.author,
+            author,                       // ← Author-Instanz übergeben
             dbPost.authorId,
             dbPost.tags ? dbPost.tags.split(",") : [],
         );

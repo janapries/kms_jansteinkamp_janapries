@@ -3,7 +3,7 @@ import type { Author } from "./Author.js";
 
 export class Post {
     
-    constructor(id: string, title: string, description: string, author: Author, authorId: number, tags: string[]){
+    constructor(id: string, title: string, description: string, author: Author | undefined, authorId: number, tags: string[]){
         this.id = id
         this.title = title;
         this.description = description;
@@ -17,7 +17,7 @@ export class Post {
     id: string;
     title: string;
     description: string;
-    author: Author;
+    author: Author | undefined;
     authorId: number;
     tags: string[];
 
