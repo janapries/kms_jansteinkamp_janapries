@@ -15,7 +15,6 @@ export class PostResource {
 
     private initRoutes() {
         this.router.get("/:id", this.getById);
-        this.router.get("/:id", this.getBySecretId);
         this.router.post("/", this.addPost);
         this.router.put("/:id", this.updatePost);
         this.router.delete("/:id", this.deletePost);
@@ -46,16 +45,7 @@ export class PostResource {
         res.json(data);
     };
 
-    getBySecretId = async (req: Request, res: Response, next: NextFunction) => {
 
-        let postID: string = "";
-        if (req.params.id === typeof (String)) {
-            postID = req.params.id;
-        }
-
-        const post = new Post(postID, "Das ist ein geheimer Post", "Sachen mit next Functions amchen spaß", "Jan", ["Secret"]);
-        res.json(post);
-    };
 
     addPost = async (req: Request, res: Response) => {
         const body: Post = req.body;
