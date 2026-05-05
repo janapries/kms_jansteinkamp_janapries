@@ -1,12 +1,16 @@
 import { Router, type Request, type Response } from "express";
 import { AuthorService } from "../Controller/AuthorService.js";
 import { Author } from "../Domain/Author.js";
+import jwt from "jsonwebtoken";
+
 
 export class AuthorResource {
 
     public router = Router();
 
     private authorService = AuthorService.Instance;
+
+    //private jwt =require('jsonwebtoken'); => das muss per @types oder? habe mich an der npm doc orientiert
 
     constructor() {
         this.initRoutes();
@@ -48,6 +52,12 @@ export class AuthorResource {
             return res.status(401).json({ error: "Ungültige Anmeldedaten" });
         }
 
-        return res.status(200).json(author);
+        const token = jwt.sign(
+            { email: author.email },
+            process.env.JWT_SECRET!,
+            { expiresIn: "1h" }
+        );
+
+        return res.status(200).json({ token });
     };
 }

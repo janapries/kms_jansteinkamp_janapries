@@ -5,6 +5,16 @@ import { Author } from "../Domain/Author.js";
 
 export class AuthorRepository implements AuthorCatalog {
 
+
+public async getAuthorByEmail(email: string): Promise<Author | undefined> {
+    const author = await prisma.author.findFirst({
+        where: { email },
+        include: { posts: true }
+    });
+
+    return author ? this.toDomain(author) : undefined;
+}
+
     public async getAllAuthors(): Promise<Author[]> {
         const authors = await prisma.author.findMany({
             include: { posts: true }

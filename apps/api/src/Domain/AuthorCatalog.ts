@@ -1,6 +1,7 @@
 import type { Author } from "./Author.js";
 
 export interface AuthorCatalog {
+    getAuthorByEmail(email: string): Promise<Author | undefined> ;
 
     getAllAuthors(): Promise<Author[]>;
     getAuthor(id: number): Promise<Author | undefined>;

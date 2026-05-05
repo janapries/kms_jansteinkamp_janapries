@@ -1,13 +1,28 @@
 import type { Author } from "../Domain/Author.js";
 import type { AuthorCatalog } from "../Domain/AuthorCatalog.js";
 import { AuthorRepository } from "../Gateway/AuthorRepository.js";
+import bcrypt from "bcrypt";
+
 
 export class AuthorService{
 
-    loginAuthor(email: any, password: any): Author {
-        throw new Error("Method not implemented.");
-    }
 
+    private saltRounds = 10;
+
+    public async loginAuthor(email: string, password: string): Promise<Author | undefined> {
+        // 1. Author per Email aus DB holen
+        const author = await this.repo.getAuthorByEmail(email);
+        console.log("Author gefunden:", author);
+        if (!author) return undefined;
+
+        // 2. Eingegebenes Passwort mit gespeichertem Hash vergleichen
+        const isValid = await bcrypt.compare(password, author.password);
+        console.log("Passwort gültig:", isValid);
+        if (!isValid) return undefined;
+
+        // 3. Author zurückgeben (Token wird in der Boundary gebaut)
+        return author;
+    }
     private static _instance: AuthorService;
 
     private repo:AuthorCatalog = new AuthorRepository;
@@ -28,6 +43,14 @@ export class AuthorService{
     }
 
     public async addAuthor(author: Author): Promise<Author> {
+        console.log("pw: " + author.password);
+        
+        // Promise-Version abwarten statt Callback
+        const hashedPW = await bcrypt.hash(author.password, this.saltRounds);
+        
+        author.password = hashedPW;
+        console.log("pw hashed: " + author.password);
+
         return this.repo.addAuthor(author);
     }
 
