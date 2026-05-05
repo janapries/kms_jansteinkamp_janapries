@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
 import { Post } from "../../../../api/src/Domain/Post";
 import { apiRequest } from "../../utils/apiClient";
-import { useAuth } from "../auth/hooks/useAuth";
+import * as SecureStore from "expo-secure-store"
 
 interface PostState {
     posts: Post[];
@@ -17,11 +17,10 @@ export const PostContext = createContext<PostState | undefined>(undefined);
 export const PostProvider = ({ children }: { children: ReactNode }) => {
 
     const [posts, setPosts] = useState<Post[]>([]);
-    const { userToken } = useAuth();
 
     const refreshPosts = async () => {
         try {
-            const data = await apiRequest('posts', 'GET', userToken!);
+            const data = await apiRequest('posts', 'GET', SecureStore.getItem("token")!);
             setPosts(data);
         } catch (error) {
             console.error("Fehler beim Erneuern der Posts:", error);
@@ -35,7 +34,7 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
 
     const addPost = async (newPost: Post): Promise<void> => {
         try {
-            await apiRequest('post', 'POST', userToken!, newPost);
+            await apiRequest('post', 'POST', SecureStore.getItem("token")!, newPost);
             refreshPosts();
         } catch (error) {
             console.error("Erstellen fehlgeschlagen:", error);
@@ -44,7 +43,7 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
 
     const removePost = async (postId: string): Promise<void> => {
         try {
-            await apiRequest(`post/${postId}`, 'DELETE', userToken!);
+            await apiRequest(`post/${postId}`, 'DELETE', SecureStore.getItem("token")!);
             refreshPosts();
         } catch (error) {
             console.error("Löschen fehlgeschlagen:", error);
@@ -53,7 +52,7 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
 
     const getPost = async (id: string): Promise<Post | undefined> => {
         try {
-            return await apiRequest(`post/${id}`, 'GET', userToken!);
+            return await apiRequest(`post/${id}`, 'GET', SecureStore.getItem("token")!);
         } catch (error) {
             console.error("Einzelner Abruf fehlgeschlagen:", error);
             return undefined;
@@ -62,7 +61,7 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
 
     const updatePost = async (updatedPost: Post): Promise<void> => {
         try {
-            await apiRequest(`post/${updatedPost.id}`, 'PUT', userToken!, updatedPost);
+            await apiRequest(`post/${updatedPost.id}`, 'PUT', SecureStore.getItem("token")!, updatedPost);
             refreshPosts();
         } catch (error) {
             console.error("Update fehlgeschlagen:", error);
@@ -70,7 +69,7 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <PostContext.Provider value={{ posts, addPost, removePost, getPost, updatePost, refreshPosts}}>
+        <PostContext.Provider value={{ posts, addPost, removePost, getPost, updatePost, refreshPosts }}>
             {children}
         </PostContext.Provider>
     );

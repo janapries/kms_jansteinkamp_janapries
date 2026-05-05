@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useState } from "react";
 import { apiRequest } from "../../utils/apiClient";
+import * as SecureStore from "expo-secure-store"
 
 interface AuthState {
     userToken: string | null;
@@ -13,20 +14,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [userToken, setUserToken] = useState<string | null>(null);
 
     const login = async (email: string, password: string) => {
-        const data = await apiRequest('user/login', 'POST', userToken!, { email, password });
+        const data = await apiRequest('user/login', 'POST', "", { email, password });
         if (data.token) {
-            setUserToken(data.token);
+            SecureStore.setItem("token", data.token);
+            setUserToken("refresh");
         }
     };
 
     const register = async (name: string, email: string, password: string) => {
-        const data = await apiRequest('user/register', 'POST', userToken!, { name, email, password });
+        const data = await apiRequest('user/register', 'POST', "", { name, email, password });
         if (data.token) {
-            setUserToken(data.token);
+            SecureStore.setItem("token", data.token);
+            setUserToken("refresh");
         }
     };
+
     return (
-    <AuthContext value={{ userToken, login, register}}>
+    <AuthContext value={{userToken, login, register}}>
         {children}
     </AuthContext>
 );

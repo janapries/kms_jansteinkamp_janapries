@@ -6,6 +6,7 @@ import PostFormScreen from '../src/feature/posts/screens/PostFormScreen';
 import PostDetailScreen from '../src/feature/posts/screens/PostDetailScreen';
 import LoginScreen from '../src/feature/auth/screens/LoginScreen';
 import RegisterScreen from '../src/feature/auth/screens/RegisterScreen';
+import * as SecureStore from "expo-secure-store"
 import { useAuth } from '../src/feature/auth/hooks/useAuth';
 
 export type RootStackParamList = {
