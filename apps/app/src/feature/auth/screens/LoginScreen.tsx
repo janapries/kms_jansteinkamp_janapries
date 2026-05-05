@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/RootStack";
 import { PasswordInput } from "../components/passwordInput";
 import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 export default function LoginScreen() {
 
@@ -15,6 +16,7 @@ export default function LoginScreen() {
 
     const [isPasswordHidden, setIsPasswordHidden] = useState(true);
     const toggleVisibility = () => setIsPasswordHidden(!isPasswordHidden);
+    const { login } = useAuth();
 
     return (
         <View>
@@ -25,8 +27,8 @@ export default function LoginScreen() {
                 <TextInput
                     mode="outlined"
                     label="Username"
-                    value={form.username}
-                    onChangeText={text => form.setUsername(text)}
+                    value={form.email}
+                    onChangeText={text => form.setEmail(text)}
                 />
                 <PasswordInput
                     label="Password"
@@ -35,10 +37,10 @@ export default function LoginScreen() {
                     secureTextEntry={isPasswordHidden}
                     onIconPressed={toggleVisibility}
                 />
-                <Button mode="contained" onPress={() => console.log('Pressed')}>
+                <Button mode="contained" onPress={() => login(form.email, form.password)}>
                     Login
                 </Button>
-                <Text onPress={() => console.log('Press Routing')} variant="labelMedium" style={styles.hyperlink}>Need an account? Sign up here!</Text>
+                <Text onPress={() => navigation.replace('Register')} variant="labelMedium" style={styles.hyperlink}>Need an account? Sign up here!</Text>
             </View>
         </View>)
 }

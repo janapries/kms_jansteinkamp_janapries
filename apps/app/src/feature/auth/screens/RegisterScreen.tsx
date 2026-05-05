@@ -7,6 +7,7 @@ import { RootStackParamList } from "../../../../navigation/RootStack";
 import { useRegisterForm } from "../hooks/useRegisterForm";
 import { useState } from "react";
 import { PasswordInput } from "../components/passwordInput";
+import { useAuth } from "../hooks/useAuth";
 
 export default function RegisterScreen() {
 
@@ -16,6 +17,7 @@ export default function RegisterScreen() {
 
     const [isPasswordHidden, setIsPasswordHidden] = useState(true);
     const toggleVisibility = () => setIsPasswordHidden(!isPasswordHidden);
+    const { register } = useAuth();
 
     return (
         <View>
@@ -28,6 +30,12 @@ export default function RegisterScreen() {
                     label="Username"
                     value={form.username}
                     onChangeText={text => form.setUsername(text)}
+                />
+                                <TextInput
+                    mode="outlined"
+                    label="Email"
+                    value={form.email}
+                    onChangeText={text => form.setEmail(text)}
                 />
                 <PasswordInput
                     label="Password"
@@ -43,10 +51,10 @@ export default function RegisterScreen() {
                     secureTextEntry={isPasswordHidden}
                     onIconPressed={toggleVisibility}
                 />
-                <Button mode="contained" onPress={() => console.log('Pressed')}>
+                <Button mode="contained" onPress={() => register(form.username, form.email, form.password)}>
                     Sign Up
                 </Button>
-                <Text onPress={() => console.log('Press Routing')} variant="labelMedium" style={styles.hyperlink}>Already have an account? Sign in here!</Text>
+                <Text onPress={() => navigation.replace('Login')}variant="labelMedium" style={styles.hyperlink}>Already have an account? Sign in here!</Text>
             </View>
         </View>)
 }

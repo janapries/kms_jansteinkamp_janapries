@@ -15,7 +15,6 @@ export const usePostForm = (editId?: string) => {
             getPost(editId).then((post) => {
                 if (post) {
                     setTitle(post.title);
-                    setAuthor(post.author);
                     setDescription(post.description);
                     setTags(post.tags.join(", "));
                 }
@@ -31,7 +30,6 @@ export const usePostForm = (editId?: string) => {
             tags: tagsArray,
             id: editId || Date.now().toString(),
             description: description,
-            author: author
         };
 
         if (editId) {

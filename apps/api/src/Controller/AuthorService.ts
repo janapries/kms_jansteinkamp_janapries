@@ -1,7 +1,7 @@
 import type { Author } from "../Domain/Author.js";
 import type { AuthorCatalog } from "../Domain/AuthorCatalog.js";
 import { AuthorRepository } from "../Gateway/AuthorRepository.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt"
 
 
 export class AuthorService{

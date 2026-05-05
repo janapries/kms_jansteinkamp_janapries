@@ -38,7 +38,6 @@ export class PostResource {
 
         res.json(post);
     };
-
     getByTest = async (req: Request, res: Response, next: NextFunction) => {
         console.log("Request bekommen");
         const data = await this.postService.getFirstPost();
@@ -49,6 +48,8 @@ export class PostResource {
 
     addPost = async (req: Request, res: Response) => {
         const body: Post = req.body;
+        const authorId = (req as any).user.uid;
+        body.authorId = Number(authorId);
 
         const resPost: Post | undefined = await this.postService.addPost(body);
 
@@ -58,9 +59,10 @@ export class PostResource {
 
         res.json(resPost);
     };
-
     updatePost = async (req: Request, res: Response) => {
         const body: Post = req.body;
+        const authorId = (req as any).user.uid;
+        body.authorId = Number(authorId);
 
         const resPost: Post | undefined = await this.postService.updatePost(body);
 

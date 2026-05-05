@@ -30,7 +30,7 @@ export default function PostDetailScreen() {
             </Appbar.Header>
             <View style={styles.content}>
                 <Text style={styles.title}>{post.title}</Text>
-                <Text style={styles.author}>Von: {post.author}</Text>
+                <Text style={styles.author}>Von: {post.author?.name}</Text>
                 <Text style={styles.description}>{post.description}</Text>
             </View>
 

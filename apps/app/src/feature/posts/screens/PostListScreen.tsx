@@ -2,18 +2,24 @@
 import { Appbar, List } from 'react-native-paper';
 import { View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../navigation/RootStack';
 import { usePosts } from "../hooks/usePosts";
+import React from 'react';
+
 
 export default function PostListScreen() {
 
     // use Nav braucht die Paramliste wegen der Overload Fehlermeldung, gekommen durch AI nachfrag, NavigationsQuelle war React doc
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+    const isFocused = useIsFocused();
     const { posts } = usePosts();
+    /*React.useEffect(() => {
+        if (isFocused) {
 
+        }
+    })*/
 
     const _onCreatePost = () => {
         navigation.navigate('Create')

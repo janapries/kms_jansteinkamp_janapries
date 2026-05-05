@@ -1,4 +1,4 @@
-import { Router, type Request, type Response } from "express";
+import { Router, type NextFunction, type Request, type Response } from "express";
 import { AuthorService } from "../Controller/AuthorService.js";
 import { Author } from "../Domain/Author.js";
 import jwt from "jsonwebtoken";
@@ -19,6 +19,7 @@ export class AuthorResource {
     private initRoutes() {
         this.router.post("/register", this.register);
         this.router.post("/login", this.login);
+        this.router.get("/:id", this.getById);
     }
 
     register = async (req: Request, res: Response) => {
@@ -35,8 +36,9 @@ export class AuthorResource {
         if (!created) {
             return res.status(409).json({ error: "Registrierung fehlgeschlagen" });
         }
+        const token = jwt.sign({ email: created.email, uid: created.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
 
-        return res.status(201).json(created);
+        return res.status(201).json({ token, author: created });
     };
 
     login = async (req: Request, res: Response) => {
@@ -53,11 +55,24 @@ export class AuthorResource {
         }
 
         const token = jwt.sign(
-            { email: author.email },
+            { email: author.email, uid: author.id },
             process.env.JWT_SECRET!,
             { expiresIn: "1h" }
         );
 
         return res.status(200).json({ token });
+    };
+
+    getById = async (req: Request, res: Response, next: NextFunction) => {
+
+        const postID = Number(req.params.id);
+
+        const post = await this.authorService.getAuthor(postID);
+
+        if (!post) {
+            return res.status(404).json({ error: "Post nicht gefunden" });
+        }
+
+        res.json(post);
     };
 }
