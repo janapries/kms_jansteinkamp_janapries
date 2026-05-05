@@ -109,19 +109,19 @@ export class PostRepository {
             password: string
         }
     }): Post {
-        const author = new Author(        // ← Author-Instanz erstellen
+        const author = new Author(      
             String(dbPost.author.id),
             dbPost.author.name,
             dbPost.author.email,
             dbPost.author.password,
-            []                            // ← posts leer lassen (zirkuläre Referenz vermeiden)
+            []                         
         );
 
         return new Post(
             String(dbPost.id),
             dbPost.title,
             dbPost.description,
-            author,                       // ← Author-Instanz übergeben
+            author,                 
             dbPost.authorId,
             dbPost.tags ? dbPost.tags.split(",") : [],
         );

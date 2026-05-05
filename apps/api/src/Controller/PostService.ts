@@ -88,12 +88,4 @@ export class PostService {
         return true;
     }
 
-
-    /**
-     * Hilfsmethode: Legt einen Demo-Post an. Praktisch zum Testen.
-     */
-    async addDemoPost(): Promise<Post> {
-        console.log(`[PostService] addDemoPost aufgerufen`);
-        return this.repo.addDemoPost();
-    }
 }
