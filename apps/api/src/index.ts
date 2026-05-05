@@ -24,7 +24,6 @@ const authorResource: AuthorResource = new AuthorResource
     // auth
     const authMiddleware = (req: any, res: any, next: any) => {
         const authHeader = req.headers["authorization"];
-        // Header muss "Bearer <token>" sein
         const token = authHeader && authHeader.split(" ")[1];
 
         if (!token) {
@@ -33,7 +32,7 @@ const authorResource: AuthorResource = new AuthorResource
 
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-            req.user = decoded; // User-Daten für spätere Handler verfügbar
+            req.user = decoded;
             next();
         } catch {
             return res.status(403).json({ error: "Token ungültig oder abgelaufen" });
