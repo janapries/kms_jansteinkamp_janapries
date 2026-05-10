@@ -89,12 +89,12 @@ public async getAuthorByEmail(email: string): Promise<Author | undefined> {
         }[]
     }): Author {
         return new Author(
-            String(dbAuthor.id),
+            dbAuthor.id,
             dbAuthor.name,
             dbAuthor.email,
             dbAuthor.password,
             dbAuthor.posts.map(post => new Post(
-                String(post.id),
+                post.id,
                 post.title,
                 post.description,
                 undefined,

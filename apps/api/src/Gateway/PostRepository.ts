@@ -20,7 +20,7 @@ export class PostRepository {
         return posts.map(this.toDomain);
     }
 
-    public async getPostById(id: string): Promise<Post | undefined> {
+    public async getPostById(id: number): Promise<Post | undefined> {
         const numericId = Number(id);
         if (Number.isNaN(numericId)) return undefined;
 
@@ -82,7 +82,7 @@ export class PostRepository {
         }
     }
 
-    public async deletePost(id: string): Promise<boolean> {
+    public async deletePost(id: number): Promise<boolean> {
         const numericId = Number(id);
         if (Number.isNaN(numericId)) return false;
 
@@ -110,7 +110,7 @@ export class PostRepository {
         }
     }): Post {
         const author = new Author(      
-            String(dbPost.author.id),
+            dbPost.author.id,
             dbPost.author.name,
             dbPost.author.email,
             dbPost.author.password,
@@ -118,7 +118,7 @@ export class PostRepository {
         );
 
         return new Post(
-            String(dbPost.id),
+            dbPost.id,
             dbPost.title,
             dbPost.description,
             author,                 

@@ -24,9 +24,9 @@ export class PostResource {
     // = wegen der pfeilfunktion, da nur hier this sichtabr ist
     getById = async (req: Request, res: Response, next: NextFunction) => {
 
-        const postID: string = req.params.id as string;
+        const postID: number = Number(req.params.id);
 
-        if (postID === "0") {
+        if (postID === 0) {
             return next("route");
         }
 
@@ -64,6 +64,9 @@ export class PostResource {
         const authorId = (req as any).user.uid;
         body.authorId = Number(authorId);
 
+        const dbPost : Post| undefined= await this.postService.getPostByID(body.id);
+        if (dbPost && dbPost.authorId !== authorId) return res.status(403).json({error: "not author"});
+
         const resPost: Post | undefined = await this.postService.updatePost(body);
 
         if (resPost === undefined) {
@@ -74,7 +77,10 @@ export class PostResource {
     };
 
     deletePost = async (req: Request, res: Response) => {
-        const postID: string = req.params.id as string;
+        const postID: number = Number(req.params.id);
+        const authorId = (req as any).user.uid;
+        const dbPost : Post| undefined= await this.postService.getPostByID(postID);
+        if (dbPost && dbPost.authorId !== authorId) return res.status(403).json({error: "not author"});
 
         const success: boolean = await this.postService.deletePost(postID);
 

@@ -63,6 +63,10 @@ export class AuthorResource {
         return res.status(200).json({ token });
     };
 
+    logout = async (req: Request, res: Response) => {
+
+    }
+
     getById = async (req: Request, res: Response, next: NextFunction) => {
 
         const postID = Number(req.params.id);

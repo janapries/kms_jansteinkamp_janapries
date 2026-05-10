@@ -33,13 +33,6 @@ export default function PostFormScreen() {
                     maxLength={20}
                 />
                 <TextInput
-                    label="Author"
-                    style={styles.input}
-                    value={post.author}
-                    onChangeText={post.setAuthor}
-                    maxLength={20}
-                />
-                <TextInput
                     label="Description"
                     style={styles.input_description}
                     value={post.description}

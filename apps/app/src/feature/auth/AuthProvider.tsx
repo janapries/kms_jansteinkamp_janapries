@@ -1,11 +1,14 @@
 import { createContext, ReactNode, useState } from "react";
 import { apiRequest } from "../../utils/apiClient";
 import * as SecureStore from "expo-secure-store"
+import { jwtDecode } from "jwt-decode";
 
 interface AuthState {
     userToken: string | null;
     login: (email: string, password: string) => Promise<void>;
     register: (name: string, email: string, password: string) => Promise<void>;
+    logout: () => Promise<void>;
+    getUidFromToken: () => Promise<number>
 }
 
 export const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -29,9 +32,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+const getUidFromToken = async () => {
+    const token = await SecureStore.getItemAsync("token");
+    if (!token) return null;
+
+    try {
+        const decoded: any = jwtDecode(token);
+        return decoded.uid;
+    } catch (error) {
+        console.error("Token konnte nicht decodiert werden:", error);
+        return null;
+    }
+};
+
+    const logout = async () => {
+        try {
+            await SecureStore.deleteItemAsync("token");
+            setUserToken(null);
+        } catch (error) {
+            console.error("Logout fehlgeschlagen:", error);
+        }
+    };
+
     return (
-    <AuthContext value={{userToken, login, register}}>
-        {children}
-    </AuthContext>
-);
+        <AuthContext value={{ userToken, login, register, logout, getUidFromToken}}>
+            {children}
+        </AuthContext>
+    );
 };

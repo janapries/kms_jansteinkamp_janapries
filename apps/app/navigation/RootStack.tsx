@@ -8,15 +8,17 @@ import LoginScreen from '../src/feature/auth/screens/LoginScreen';
 import RegisterScreen from '../src/feature/auth/screens/RegisterScreen';
 import * as SecureStore from "expo-secure-store"
 import { useAuth } from '../src/feature/auth/hooks/useAuth';
+import ProfileScreen from '../src/feature/auth/screens/ProfileScreen';
 
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined
+  Profile: undefined
 
   Home: undefined;
   Provider: undefined;
-  Create: undefined | { id?: string };
-  Detail: { id: string };
+  Create: undefined | { id?: number };
+  Detail: { id: number };
 };
 
 const Stack = createNativeStackNavigator();
@@ -37,6 +39,7 @@ export function RootStack() {
           <Stack.Screen name="Home" component={PostListScreen} />
           <Stack.Screen name="Create" component={PostFormScreen} />
           <Stack.Screen name="Detail" component={PostDetailScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
         </>
       )}
     </Stack.Navigator>

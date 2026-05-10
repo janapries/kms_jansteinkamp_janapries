@@ -6,8 +6,8 @@ import * as SecureStore from "expo-secure-store"
 interface PostState {
     posts: Post[];
     addPost: (newPost: Post) => Promise<void>;
-    removePost: (postId: string) => Promise<void>;
-    getPost: (id: string) => Promise<Post | undefined>;
+    removePost: (postId: number) => Promise<void>;
+    getPost: (id: number) => Promise<Post | undefined>;
     updatePost: (updatedPost: Post) => Promise<void>;
     refreshPosts: () => Promise<void>;
 }
@@ -27,11 +27,6 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    // Alle Posts beim Start laden
-    useEffect(() => {
-        refreshPosts();
-    }, []);
-
     const addPost = async (newPost: Post): Promise<void> => {
         try {
             await apiRequest('post', 'POST', SecureStore.getItem("token")!, newPost);
@@ -41,7 +36,7 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const removePost = async (postId: string): Promise<void> => {
+    const removePost = async (postId: number): Promise<void> => {
         try {
             await apiRequest(`post/${postId}`, 'DELETE', SecureStore.getItem("token")!);
             refreshPosts();
@@ -50,7 +45,7 @@ export const PostProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const getPost = async (id: string): Promise<Post | undefined> => {
+    const getPost = async (id: number): Promise<Post | undefined> => {
         try {
             return await apiRequest(`post/${id}`, 'GET', SecureStore.getItem("token")!);
         } catch (error) {

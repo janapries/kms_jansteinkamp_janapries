@@ -3,7 +3,7 @@ import { usePosts } from "./usePosts";
 import { Post } from "../../../../../api/src/Domain/Post";
 
 
-export const usePostForm = (editId?: string) => {
+export const usePostForm = (editId?: number) => {
     const { addPost, updatePost, getPost } = usePosts();
     const [title, setTitle] = useState("");
     const [tags, setTags] = useState("");
@@ -28,7 +28,7 @@ export const usePostForm = (editId?: string) => {
         const postData: Post = {
             title,
             tags: tagsArray,
-            id: editId || Date.now().toString(),
+            id: editId,
             description: description,
         };
 

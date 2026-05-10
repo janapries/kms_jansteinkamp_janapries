@@ -20,7 +20,7 @@ export class PostService {
     }
 
 
-    async getPostByID(id: string): Promise<Post | undefined> {
+    async getPostByID(id: number): Promise<Post | undefined> {
         console.log(`[PostService] getPostByID aufgerufen mit id=${id}`);
         return this.repo.getPostById(id);
     }
@@ -74,7 +74,7 @@ export class PostService {
     }
 
 
-    async deletePost(id: string): Promise<boolean> {
+    async deletePost(id: number): Promise<boolean> {
         console.log(`[PostService] deletePost aufgerufen mit id=${id}`);
 
         const deleted = await this.repo.deletePost(id);

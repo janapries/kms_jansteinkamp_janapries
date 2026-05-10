@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { usePosts } from "./usePosts";
 import { Post } from "../../../../../api/src/Domain/Post";
 
-export const usePost = (id?: string) => {
+export const usePost = (id?: number) => {
     const { getPost } = usePosts();
     const [post, setPost] = useState<Post | null>(null);
     const [isLoading, setIsLoading] = useState(false);

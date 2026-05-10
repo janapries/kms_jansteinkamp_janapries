@@ -5,6 +5,8 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { usePosts } from "../hooks/usePosts";
 import { usePost } from "../hooks/usePost";
+import { useAuth } from "../../auth/hooks/useAuth";
+import { useEffect, useState } from "react";
 
 export default function PostDetailScreen() {
 
@@ -14,6 +16,17 @@ export default function PostDetailScreen() {
     const route = useRoute<RouteProp<RootStackParamList, 'Detail'>>();
     const postId = route.params?.id;
     const { post, isLoading } = usePost(postId);
+    const { getUidFromToken } = useAuth();
+    const [myUid, setMyUid] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchMyId = async () => {
+            const uid = await getUidFromToken();
+            if (uid) setMyUid(uid.toString()); // Sicherstellen, dass es ein String zum Vergleichen ist
+        };
+        fetchMyId();
+    }, []);
+    const isOwner = myUid === post?.authorId?.toString();
 
     const _onBack = () => {
         navigation.goBack();
@@ -33,22 +46,32 @@ export default function PostDetailScreen() {
                 <Text style={styles.author}>Von: {post.author?.name}</Text>
                 <Text style={styles.description}>{post.description}</Text>
             </View>
-
             <View style={styles.content}>
-                <Button style={styles.button} mode="contained" onPress={() => navigation.navigate('Create', { id: postId })}>
-                    Edit Post
-                </Button>
-                <Button style={styles.buttonDelete} mode="contained" onPress={async () => {
-                    await removePost(postId);
-                    navigation.goBack();
-                }}>
-                    Delete Post
-                </Button>
+                {isOwner && (
+                    <View style={styles.content}>
+                        <Button
+                            style={styles.button}
+                            mode="contained"
+                            onPress={() => navigation.navigate('Create', { id: postId })}
+                        >
+                            Edit Post
+                        </Button>
+                        <Button
+                            style={styles.buttonDelete}
+                            mode="contained"
+                            onPress={async () => {
+                                await removePost(postId);
+                                navigation.goBack();
+                            }}
+                        >
+                            Delete Post
+                        </Button>
+                    </View>
+                )}
             </View>
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     content: {
         padding: 16,
